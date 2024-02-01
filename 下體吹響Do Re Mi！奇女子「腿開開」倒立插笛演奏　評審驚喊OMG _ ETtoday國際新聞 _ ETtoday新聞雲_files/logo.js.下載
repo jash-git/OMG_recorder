@@ -1,0 +1,25 @@
+
+
+//logo_ettoday =======================================
+(function(){
+	let etLogoRightNow = new Date();
+
+	//農曆新年
+	let etLogoStartTime1 = new Date(2024, 2-1, 7, 0, 0, 0);
+	let etLogoEndTime1 = new Date(2024, 2-1, 18, 23, 59, 59);
+	// let etLogoSrc1 = "./images/logo/chinese_year_2024.gif"; 
+	let etLogoSrc1 = "https://static.ettoday.net/style/ettoday2017/images/logo/chinese_year_2024.gif";
+
+
+
+	if(etLogoRightNow > etLogoStartTime1 && etLogoRightNow < etLogoEndTime1){
+		document.write('<a href="https://www.ettoday.net/?from=logo" title="回首頁"><img src="'+etLogoSrc1+'" border="0" alt="ETtoday 新聞雲"/></a>');
+	}else{//下檔期間-預設Logo		
+		document.write('<a href="https://www.ettoday.net/?from=logo" title="回首頁"><img src="https://static.ettoday.net/style/ettoday2017/images/logo_ettoday_v4.png" border="0" alt="ETtoday 新聞雲"/></a>');
+	}
+
+})();
+
+
+
+

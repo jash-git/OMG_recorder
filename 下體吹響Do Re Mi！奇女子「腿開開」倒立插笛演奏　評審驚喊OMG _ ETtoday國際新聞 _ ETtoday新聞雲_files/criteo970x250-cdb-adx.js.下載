@@ -1,0 +1,19 @@
+// EtToday - TW - CDB - SA - 970x250 - Top  (PC) / 全網_超級大橫幅
+var CriteoCDBhtml = '\
+	<div id="criteo_1086336"><script>CriteoDisplayAd("criteo_1086336", function() { \
+	var slotid = "criteo_1086336";\
+	var div = document.getElementById(slotid);\
+	var ifr = document.createElement("iframe"); ifr.setAttribute("id", slotid+"_iframe"), ifr.setAttribute("frameborder","0"), ifr.setAttribute("allowtransparency","true"), ifr.setAttribute("hspace","0"), ifr.setAttribute("marginwidth","0"), ifr.setAttribute("marginheight","0"), ifr.setAttribute("scrolling","no"), ifr.setAttribute("vspace","0"), ifr.setAttribute("width", 970), ifr.setAttribute("height", 250);\
+	div.appendChild(ifr);\
+	var htmlcode = `<script type="text/javascript">\
+		google_ad_client = "ca-pub-5538854675439600";\
+		google_ad_slot = "3990870939";\
+		google_ad_width = 970;\
+		google_ad_height = 250;\
+		</scr`+`ipt>\
+		<script type="text/javascript" src="//pagead2.googlesyndication.com/pagead/show_ads.js"></scr`+`ipt>\
+	`;\
+	var ifrd = ifr.contentWindow.document; ifrd.open(); ifrd.write(htmlcode); ifrd.close();\
+});</script></div>';
+
+document.write(CriteoCDBhtml);

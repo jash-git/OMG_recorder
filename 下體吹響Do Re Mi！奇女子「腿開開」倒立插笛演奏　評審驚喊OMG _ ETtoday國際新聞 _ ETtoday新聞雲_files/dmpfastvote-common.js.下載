@@ -1,0 +1,63 @@
+//模組：快問快答 開始====================
+//放在dfp-gpt.js裡面，讓它引用
+//提供iframe控制高度、關閉用
+//★★請勿使用document.write★★
+
+$(function(){
+
+  if($('.et_survey_box').length > 0){	        
+        
+		let etSurveyBox = document.querySelector('.et_survey_box');
+		let iframe = document.getElementById('if_et_survey');
+		// var iframeOrigin = 'https://beta-www.ettoday.net'; //來源網域
+    let iframeOrigin = 'https://www.ettoday.net'; //來源網域
+
+    // 監聽 iframe 下載
+    let iframeUrl = $('#if_et_survey').attr('src');
+    let tempIframe = document.createElement('iframe');
+    tempIframe.src = iframeUrl;
+    tempIframe.style.display = 'none';
+    tempIframe.onload = function() {
+        document.body.removeAttribute(tempIframe);
+        //初始 iframe 高度
+        setIframe();
+    }
+    document.body.appendChild(tempIframe);
+
+		$('.et_survey_box .inner').scrollTop(0); 
+      $('.et_survey_box .inner').on('scroll', function(){
+          $(this).addClass('scrolling');
+      });
+
+		function iframeHandle(e){
+      if(e.data.toString().indexOf('IframeStatus') !== -1 && e.origin === iframeOrigin){
+          
+        var value = e.data.split(',');
+        iframe.height = value[1];//設高度
+        console.log('et_survey iframe.height: ', iframe.height);
+				
+				//關閉問卷
+				if(value[2] === 'true'){
+					etSurveyBox.remove();
+				}
+			}
+		}
+		window.addEventListener('message', iframeHandle, false);
+
+		//傳訊息給子 要高度＆是否關閉問卷====
+		function setIframe(){
+			iframe.contentWindow.postMessage('IframeStatus', iframeOrigin + '/');
+		}
+	
+		window.addEventListener("resize", setIframe, false);
+
+    $('.et_survey-btn_close, .et_survey-overlay').on('click', function(){
+      etSurveyBox.remove();
+      window.removeEventListener('message', iframeHandle, false);
+      window.removeEventListener("resize", setIframe, false);
+    });
+	}
+
+
+});
+//模組：快問快答 結束====================

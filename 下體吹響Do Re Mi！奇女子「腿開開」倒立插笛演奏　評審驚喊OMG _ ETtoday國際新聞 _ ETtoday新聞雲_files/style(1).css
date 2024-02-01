@@ -1,0 +1,78 @@
+@import url(https://fonts.googleapis.com/earlyaccess/notosanstc.css);
+*{font-family:'Noto Sans TC','微軟正黑體';}
+*,*::before,*::after{margin:0px; padding:0px; -webkit-box-sizing:border-box; -moz-box-sizing:border-box; box-sizing:border-box;}
+
+#et_board_container *{font-style:normal;/*取消斜體*/}
+
+/*第0層 ==========*/
+#et_board_container ul.lv0{ list-style:none; margin-bottom:20px;border:0px solid purple;}
+#et_board_container ul.lv0 > li{ display:flex; flex-wrap:wrap; justify-content:space-between; align-content:flex-start; margin-bottom:20px; border-bottom:1.5px solid #9693BA; }
+#et_board_container ul.lv0 > li:last-child{border:none;}/*最後一條線取消*/
+
+/*box_1*/
+#et_board_container ul.lv0 > li > section.box_1{width:50px; border:0px solid orange; }
+#et_board_container ul.lv0 > li > section.box_1 > img{ width:35px;height:35px;line-height:35px;object-fit: cover;text-align: center; border-radius:50%;}
+
+/*box_2*/
+#et_board_container ul.lv0 > li > section.box_2{flex:1 1; border:0px solid orange; }
+#et_board_container ul.lv0 > li > section.box_2 > p.operate{margin-bottom:10px;}
+#et_board_container ul.lv0 > li > section.box_2 > p.operate > strong{ font-size: 14px; margin-right:5px; color:#2E2870;}
+
+#et_board_container ul.lv0 > li > section.box_2 > p.operate > i.icon_crown{ display:inline-block; width:20px; height:20px; text-align: center; background:url(../images/icon_100x100@2.png) 0px 0px; background-size:60px auto; vertical-align:-4px;}
+#et_board_container ul.lv0 > li > section.box_2 > p.operate > i.icon_top{font-size:12px; color:#9693BA;}
+
+#et_board_container ul.lv0 > li > section.box_2 > p.summary{ font-size:15px;margin-bottom:15px; color:#151233; border:0px solid blue; }
+
+/*btn_toggle*/
+#et_board_container ul.lv0 > li > section.box_2 .btn_toggle{ padding:0 5px; margin-bottom:15px; font-size:14px; background:transparent; color:#52ACDD; cursor: pointer; border:0px solid red;  }
+#et_board_container ul.lv0 > li > section.box_2 .btn_toggle i{ margin-left:5px; font-style:normal; font-size:10px; text-align: center; vertical-align:2px; border:0px solid darkred; }
+
+
+/*box_3*/
+#et_board_container ul.lv0 > li > section.box_3 {width:90px; display:flex; flex-direction:column ;justify-content:flex-start; align-items:flex-end;padding:5px; border:0px solid red; }
+#et_board_container ul.lv0 > li > section.box_3 > p.like { font-size:12px; margin-bottom:12px; color:#9693BA; border:0px solid darkred; }
+#et_board_container ul.lv0 > li > section.box_3 > p.like > i.icon_like{ display:inline-block; width:20px; height:20px; text-align: center; background:url(../images/icon_100x100@2.png) 0px -60px; background-size:60px auto; vertical-align:-4px;}
+#et_board_container ul.lv0 > li > section.box_3 > p.time{ font-size:12px;color:#9693BA; }
+
+/*414px*/
+@media only screen and (max-width:414px){
+    #et_board_container ul.lv0 > li > section.box_3 {width:70px;}
+}
+
+/*第1層 ==========*/
+#et_board_container ul.lv0 > li > ol.lv1{ width:100%; margin:auto auto 7px 50px; padding-left:7px; padding-bottom:7px; border-left:1px solid #E5E5E5; display:none;  /*display:none 初始隱藏*/ }
+#et_board_container ul.lv0 > li > ol.lv1 > li{ display:flex;flex-wrap:wrap; justify-content:space-between; align-content:flex-start;
+    margin-bottom:10px;  border-bottom:1.5px solid #9693BA;}
+#et_board_container ul.lv0 > li > ol.lv1 li:last-child{border:none;}/*最後一條線取消*/
+
+/*box_1*/
+#et_board_container ul.lv0 > li > ol.lv1 > li > section.box_1{width:40px; border:0px solid red; }
+#et_board_container ul.lv0 > li > ol.lv1 > li > section.box_1 > img{width:30px;height:30px;line-height:30px;object-fit:cover;text-align:center; border-radius:50%;}
+
+/*box_2*/
+#et_board_container ul.lv0 > li > ol.lv1 > li > section.box_2{flex:1 1; border:0px solid pink; }
+#et_board_container ul.lv0 > li > ol.lv1 > li > section.box_2 > p.operate { font-size: 14px; color:#2E2870; margin-bottom:5px; border:0px solid gold; }
+#et_board_container ul.lv0 > li > ol.lv1 > li > section.box_2 > p.operate > em{font-size:14px; color:#9693BA;}
+#et_board_container ul.lv0 > li > ol.lv1 > li > section.box_2 > p.operate > em i img{ width:auto; height:20px; vertical-align:sub; margin-right:5px;}
+#et_board_container ul.lv0 > li > ol.lv1 > li > section.box_2 > p.summery { font-size:15px; margin-bottom:5px; color:#151233; border:0px solid blue; }
+
+
+/*box_3*/
+#et_board_container ul.lv0 > li > ol.lv1 > li > section.box_3{width:90px; 
+    display:flex; flex-direction:column ;justify-content:flex-start; align-items:flex-end; padding:5px; border:0px solid yellow; }
+#et_board_container ul.lv0 > li > ol.lv1 > li > section.box_3 > p.like { font-size:12px; margin-bottom:7px; color:#9693BA;}
+#et_board_container ul.lv0 > li > ol.lv1 > li > section.box_3 > p.like > i.icon_like{ display:inline-block; width:20px; height:20px; text-align: center; background:url(../images/icon_100x100@2.png) 0px -60px; background-size:60px auto; vertical-align:-4px;  }
+#et_board_container ul.lv0 > li > ol.lv1 > li > section.box_3 > p.time{ font-size:12px;color:#9693BA;}	
+
+/*414px*/
+@media only screen and (max-width:414px){
+    #et_board_container ul.lv0 > li > ol.lv1 > li > section.box_3 {width:65px;}
+}
+
+/*no_comments 無任何留言時的墊檔圖*/
+#et_board_container .no_comments img{ display:block; width:45%; height:auto; margin:0px auto;}
+
+/*414px*/
+@media only screen and (max-width:414px){
+    #et_board_container .no_comments img{ width:75%;}
+}

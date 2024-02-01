@@ -1,0 +1,14 @@
+//Google 廣告封鎖復原 start ==========================================
+var adUnblock = document.createElement("script");
+adUnblock.async = true;
+adUnblock.setAttribute("nonce", "xrTxZOq1tO-oJPkmB_9-Kw");
+adUnblock.src = "https://fundingchoicesmessages.google.com/i/pub-7504183592568612?ers=1";
+adUnblock.onload = function () {
+  console.log("adUnblock Loaded!!");
+  var adUnblock_script = document.createElement("script");
+      adUnblock_script.setAttribute("nonce", "xrTxZOq1tO-oJPkmB_9-Kw"),
+      (adUnblock_script.text = '(function() {function signalGooglefcPresent() {if (!window.frames["googlefcPresent"]) {if (document.body) {const iframe = document.createElement("iframe"); iframe.style = "width: 0; height: 0; border: none; z-index: -1000; left: -1000px; top: -1000px;"; iframe.style.display = "none"; iframe.name = "googlefcPresent"; document.body.appendChild(iframe);} else {setTimeout(signalGooglefcPresent, 0);}}}signalGooglefcPresent();})();'), 
+      document.head.appendChild(adUnblock_script);
+}
+document.head.appendChild(adUnblock);
+//Google 廣告封鎖復原 end ===========================================

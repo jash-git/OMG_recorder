@@ -1,0 +1,23 @@
+window.addEventListener('message', function(event) {
+  const getMetaValue = (key) => {
+    const meta = document.querySelector(`meta[property="${key}"],meta[name="${key}"]`);
+    return meta?.getAttribute('content') || meta?.getAttribute('value') || '';
+  }
+  const getCanonicalUrl = () => {
+    const linkTags = document.querySelectorAll('link');
+    const canonicalLink = Array.from(linkTags).find(tag => tag.getAttribute('rel') === 'canonical');
+    if (!canonicalLink) {
+      return null;
+    }
+    return canonicalLink.getAttribute('href');
+  }
+  const dableItemId = getMetaValue('dable:item_id');
+  const canonicalUrl = getCanonicalUrl();
+  const { data } = event;
+  if (data.channel === 'dable' && data.type === 'request-item-id') {
+    event.source.postMessage(`dable_item_id=${dableItemId}`, '*');
+  }
+  if (data.channel === 'dable' && data.type === 'request-canonical-url') {
+    event.source.postMessage(`canonical_url=${canonicalUrl}`, '*');
+  }
+});

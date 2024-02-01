@@ -1,0 +1,678 @@
+//readMore：推薦模組 開始==================== Mode 2 (先推新聞頁，全看完後，改推列表頁，會使用 cookie 紀錄)
+(function(){
+    
+  // 可控制變數
+  // const isMobile = detect_mobile();
+  const isAddMTrigger = false; // mobile是否要有trigger元素 (true / false);
+  const currentHref = window.location.href;
+  const isFacebookInAppBrowser = () => /FB_IAB/.test(navigator.userAgent) || /FBAN/.test(navigator.userAgent) || /FBAV/.test(navigator.userAgent); //FB webview & Messenger webview
+  const isEtBlank = localStorage.getItem("isetblank");
+  let _body;
+  let triggerEle;
+  let state;
+  let newState = history.state;
+  let m_readMoreUrl;
+  var random_no = Math.floor(Math.random()*3); //有幾個選項就乘以幾
+  var fromDevice = "";
+
+  var ampNewsArr;  //★cookie(當前新聞陣列)
+  var cookieArr;  //★cookie(使用者看過的陣列)
+  var ampNewsID;  //★cookie(random新聞id)
+  var cookieValidVal = 2880; // ★cookie(到期時間-分鐘) ★★★
+  var cookieName = "AMP-Readmore";  //★cookie(名稱)
+  var cookieExpireName = "AMP-Readmore-expire";  //★cookie(到期名稱)
+  var cookieExpireTime = getCookieVal(cookieExpireName); //★cookie(到期時間)
+  var isSetCookie = true; //★是否設定cookie
+  var cookieMode = 2; //★cookie模式 1,2,3 ★★★
+  //模式(1)：只推新聞頁，但不使用 cookie，所以會重覆推文
+  //模式(2)：先推新聞頁，全看完後，改推列表頁，會使用 cookie 紀錄
+  //模式(3)：只推列表頁
+  
+  
+  if (isMobile) {//手機版
+    fromDevice = "mobile";
+    
+    //導到 AMP 新聞頁 (Mode 2) ★★★
+    if (window.location.href.indexOf("star.ettoday.net") !== -1){//影劇
+      ampNewsArr = ["2675588","2675606","2675662","2675637","2675202","2675542","2675006","2675629","2675642","2675195"];
+    } else {
+      ampNewsArr = ["2673813","2675157","2675026","2675465","2675041","2675649","2673702","2675217","2675702","2674823"];
+    }
+
+    // ★cookie
+    cookieActionType(cookieMode);
+
+  }else{//電腦版
+    fromDevice = "desktop";
+	if (window.location.href.indexOf("boba.ettoday.net") !== -1){//播吧
+		var pc_readMoreUrl = "https://boba.ettoday.net/category/228?from=readMore_desktop"; //桌機版 Boba
+	} else {
+		if ( random_no === 0) {//popin
+		  //var m_readMoreUrl = "/amp/readmore/popin.htm?from="+fromDevice; //手機版 Popin
+		  var pc_readMoreUrl = "/amp/readmore/popin.htm?from="+fromDevice; //桌機版 Popin
+		}else if ( random_no === 1) {//MicroAd
+		  //var m_readMoreUrl = "/amp/readmore/microad.htm?from="+fromDevice; //手機版 MicroAd
+		  var pc_readMoreUrl = "/amp/readmore/microad.htm?from="+fromDevice; //桌機版 MicroAd
+		}else{//dable
+		  //var m_readMoreUrl = "/amp/readmore/dable.htm?from="+fromDevice; //手機版 Dable
+		  var pc_readMoreUrl = "/amp/readmore/dable.htm?from="+fromDevice; //桌機版 Dable
+		}
+	}
+  }
+
+
+  //★cookie
+  function cookieActionType(mode){
+    switch(mode){
+      case 1:
+        isSetCookie = false;
+        var random_newsID = Math.floor(Math.random()*ampNewsArr.length);
+        m_readMoreUrl = "/amp/amp_news.php7?news_id="+ampNewsArr[random_newsID]+"&from=readMore"; 
+        //要刪除已存在的 cookie，請打開以下兩行 ★★★
+        deleteCookie(cookieName);
+        deleteCookie(cookieExpireName);
+        break;
+      case 2:
+        //如果不要在 Mobileweb 上開始記錄 cookie 功能，就 mark 掉以下兩行 ★★★
+        var newsID = getNewsID(); //瀏覽過的新聞id
+        newsID ? setNewsIDCookie(newsID): ""; 
+        isSetCookie && ampNewsArr.length !== 0 ? setAmpCookie() : ""; 
+        break;
+      case 3:
+        isSetCookie = false;
+        m_readMoreUrl = detectNewsType();
+        //要刪除已存在的 cookie，請打開以下兩行 ★★★
+        //deleteCookie(cookieName);
+        //deleteCookie(cookieExpireName);
+        break;
+    }
+  };
+
+  // 新聞頁
+  function popRandomNews(id){
+    if(!id) return;
+    setCookieArr(id);
+
+    //轉到 AMP(true) 或 Mobileweb(false) ★★★
+    //var gotoAMP = true;
+    var gotoAMP = false;
+
+    if (gotoAMP) {//轉到 AMP 新聞頁 
+      m_readMoreUrl = `/amp/amp_news.php7?news_id=${id}&from=readMore`;
+    }else{
+      if ((myCountry === null || myCountry === "" || typeof(myCountry) === "undefined" || myCountry === "TW") && !isChrome) {//無國家cookie 或 台灣 且 非Chrome 轉 Mobileweb
+        if (currentHref.indexOf("travel.ettoday.net") !== -1 || currentHref.indexOf("game.ettoday.net") !== -1 || currentHref.indexOf("life.ettoday.net") !== -1){//旅遊雲 or 遊戲雲 or 生活雲
+          m_readMoreUrl = `/article/${id}.htm?from=readMore_amp`;
+        } else if (currentHref.indexOf("boba.ettoday.net") !== -1){//播吧
+          m_readMoreUrl = "https://boba.ettoday.net/category/228?from=readMore_mobile";
+        } else if (currentHref.indexOf("www.ettoday.net") !== -1 || currentHref.indexOf("m.ettoday.net") !== -1){//主站
+          m_readMoreUrl = `/news/20111101/${id}.htm?from=readMore_amp`;
+        }else{
+          m_readMoreUrl = `/news/${id}?from=readMore_amp`;
+        }
+      }else{//非台灣, 是Chrome 轉 AMP 新聞頁
+        //m_readMoreUrl = `/amp/amp_news.php7?news_id=${id}&from=readMore`;
+        m_readMoreUrl = `https://www.ettoday.net/news/20111101/${id}.htm?from=readMore_amp`;
+      }
+    }
+  };
+
+  // amp列表頁
+  function detectNewsType(){
+    //導到 AMP 列表頁
+    var newsList = "";
+
+    if (currentHref.indexOf("pets.ettoday.net") !== -1){//寵物雲 8
+      newsList = "/amp/amp_newslist.php?kid=8&from=readMore"; 
+    } else if (currentHref.indexOf("star.ettoday.net") !== -1){//星光雲 9
+      newsList = "/amp/amp_newslist.php?kid=9&from=readMore"; 
+    } else if (currentHref.indexOf("sports.ettoday.net") !== -1){//運動雲 10
+      newsList = "/amp/amp_newslist.php?kid=10&from=readMore"; 
+    } else if (currentHref.indexOf("travel.ettoday.net") !== -1){//旅遊雲 11
+      newsList = "/amp/amp_newslist.php?kid=11&from=readMore"; 
+    } else if (currentHref.indexOf("finance.ettoday.net") !== -1){//財經雲 17
+      newsList = "/amp/amp_newslist.php?kid=17&from=readMore"; 
+    } else if (currentHref.indexOf("health.ettoday.net") !== -1){//健康雲 21
+      newsList = "/amp/amp_newslist.php?kid=21&from=readMore"; 
+    } else if (currentHref.indexOf("game.ettoday.net") !== -1){//遊戲雲 24
+      newsList = "/amp/amp_newslist.php?kid=24&from=readMore"; 
+    } else if (currentHref.indexOf("house.ettoday.net") !== -1){//房產雲 33
+      newsList = "/amp/amp_newslist.php?kid=33&from=readMore"; 
+    } else if (currentHref.indexOf("speed.ettoday.net") !== -1){//車雲 34
+      newsList = "/amp/amp_newslist.php?kid=34&from=readMore";
+    } else if (currentHref.indexOf("boba.ettoday.net") !== -1){//播吧
+      newsList = "https://boba.ettoday.net/category/228?from=readMore_mobile";
+    }else{
+      //www 主站 或 其它子頻道 
+      console.log("section:"+GetMetaItemprop("section"));
+      if (GetMetaItemprop("section") === "政治"){//政治 1
+        newsList = "/amp/amp_newslist.php?kid=1&from=readMore"; 
+      } else if (GetMetaItemprop("section") === "國際"){//國際 2
+        newsList = "/amp/amp_newslist.php?kid=2&from=readMore"; 
+      } else if (GetMetaItemprop("section") === "新奇"){//新奇 4
+        newsList = "/amp/amp_newslist.php?kid=4&from=readMore"; 
+      } else if (GetMetaItemprop("section") === "生活"){//生活 5
+        newsList = "/amp/amp_newslist.php?kid=5&from=readMore"; 
+      } else if (GetMetaItemprop("section") === "社會"){//社會 6
+        newsList = "/amp/amp_newslist.php?kid=6&from=readMore"; 
+      } else if (GetMetaItemprop("section") === "消費"){//消費 12
+        newsList = "/amp/amp_newslist.php?kid=12&from=readMore"; 
+      } else if (GetMetaItemprop("section") === "3C家電"){//3C家電 20
+        newsList = "/amp/amp_newslist.php?kid=20&from=readMore";
+      }else{ // 非指定大類 或 非新聞頁
+        newsList = "/amp/amp_newslist.php?kid=9&from=readMore"; //星光雲 9
+      }
+    }
+    return newsList;
+  };
+
+   //★cookie
+  function getRandomNum(arr){
+    var newsLen = arr.length - 1;
+    return Math.floor(Math.random() * (newsLen - 0 + 1)) + 0;
+  };
+
+  //★cookie
+  function deleteCookie(name) {
+    document.cookie = name +'=; Path=/; domain=ettoday.net; Expires=Thu, 01 Jan 1970 00:00:01 GMT;';
+  };
+
+   //★cookie
+  function setCookie(name, value, time){
+    var expireName = name;
+    var date;
+
+    if (time !== null){
+      var expireMin = Number(time); // 定義cookie到期時數(分)
+      var iExpireDate = new Date();
+      iExpireDate.setTime(iExpireDate.getTime() + (expireMin * 60 * 1000));
+      date = iExpireDate.toUTCString();
+    }else{
+      date = cookieExpireTime;
+    }
+
+    var val = value !== null ? value : iExpireDate.toUTCString(); // 如果沒有value就用時間
+    document.cookie = expireName + "=" + val + "; expires=" + date + "; domain=ettoday.net; path=/";
+    // document.cookie = expireName + "=" + value + "; expires=" + iExpireDate.toUTCString() + "; domain=ettoday.net; path=/";
+  };
+
+   //★cookie
+  function getCookieVal(name) {
+    var getCookieValues = function(cookie) {
+      var cookieArray = cookie.split('=');
+      return cookieArray[1].trim();
+    };
+    var getCookieNames = function(cookie) {
+      var cookieArray = cookie.split('=');
+      return cookieArray[0].trim();
+    };
+
+    var cookies = document.cookie.split(';');
+    var cookieValue = cookies.map(getCookieValues)[cookies.map(getCookieNames).indexOf(name)];
+    return (cookieValue === undefined) ? null : cookieValue;
+  };
+
+  
+
+   //★cookie
+   function getNewsID(){
+    var metas = document.getElementsByTagName("meta");
+    var id;
+    for (var i = 0; i < metas.length; i ++) {
+        if (metas[i].getAttribute("property") === "dable:item_id") {
+          id = metas[i].getAttribute("content");
+        }
+    }
+    return id;
+  };
+
+  //★cookie
+  function filterArr(){
+    // 取出過濾後(沒有重複)的編號
+    let arrFilter = ampNewsArr.filter((e)=>{
+      return cookieArr.indexOf(e) === -1
+    });
+
+    //如果全部都跑完執行列表
+    if(arrFilter.length === 0){
+      // deleteCookie(cookieName); 
+      // deleteCookie(cookieExpireName);
+      // cookieExpireTime = null;
+      // cookieArr = []; // 歸零
+      // ampNewsID = ampNewsArr[getRandomNum(ampNewsArr)];
+      m_readMoreUrl = detectNewsType(); 
+    }else{
+      ampNewsID = arrFilter[getRandomNum(arrFilter)];
+    }
+  };
+
+  //★cookie
+  function setAmpCookie(){
+    var cookieVal = getCookieVal(cookieName);
+    if(!cookieVal){
+      cookieArr = []; // 第一次進來
+      ampNewsID = ampNewsArr[getRandomNum(ampNewsArr)];
+    }else{
+      cookieArr = cookieVal;
+      cookieArr = cookieArr.split("|")
+      filterArr();
+    }
+    // setCookieArr()
+  };
+
+  //★cookie (寫入新聞頁id)
+  function setNewsIDCookie(id){
+    var cookieVal = getCookieVal(cookieName);
+    if(!cookieVal){
+      cookieArr = [];
+    }else{
+      cookieArr = cookieVal; 
+      cookieArr = cookieArr.split("|");
+    }
+    setCookieArr(id);
+  };
+
+  //★cookie
+  function setCookieArr(id){
+    if (!id || !cookieArr) return;
+    if(cookieArr.includes(id)) return;
+
+    cookieArr.push(id);
+    var cookie = cookieArr.join("|");
+    if(cookie.endsWith("//|")){
+      cookie = cookie.substring(0, cookieArr.length-1);
+    }
+
+    if(cookieExpireTime){
+      setCookie(cookieName, cookie, null);
+    }else{ // 第一次下cookie
+      setCookie(cookieName, cookie, cookieValidVal); 
+      setCookie(cookieExpireName, null, cookieValidVal); // 計算到期時間
+    }
+  };
+
+  function detect_mobile() {
+    var ua = navigator.userAgent;
+    var isMobile = /Android|webOS|iPhone|iPad|iPod/i.test(ua);
+    return isMobile;
+  };
+
+  // 點擊監聽是否有hash(先備用)
+  function detectLink(e){
+    if(!e.target.matches("a")) return;
+    var link = e.target.href;
+    if(link.indexOf('#')> 0 && link.split("#")[0] === currentHref){
+      window.removeEventListener("popstate", popstateEvent);
+      document.removeEventListener("click", detectLink);
+      return;
+    }
+  };
+
+  function setHistory(){
+    if (isFacebookInAppBrowser() || navigator.userAgent.includes("Instagram")) {
+      var current_url = document.URL; // 當前頁
+      if (current_url.includes("?")) {//強制在原網址加參數，讓它變得不一樣
+        var sec_url = current_url + '&before=1';
+      } else {
+        var sec_url = current_url + '?before=1';
+      }
+      history.pushState({ page: "referrer" }, "2", sec_url); 
+      
+    } else {
+      history.pushState({ page: "referrer" }, "Referrer Page", window.location.href);
+    }
+
+    state = history.state;
+    console.log("state", state);
+  };
+
+  function setStorage(e){
+    if(!e.target.matches("a")) return;
+    var link = e.target.href;
+    var target = e.target.getAttribute("target") || "";
+    if(target.indexOf("blank") > -1 && link.indexOf("ettoday") > -1){
+      localStorage.setItem("isetblank", 1);
+      console.log(localStorage.getItem('isetblank'))
+    }
+  };
+
+  function mobileListener(){
+    function loop() {
+      if (!state) {
+        setHistory()
+        window.addEventListener('popstate', popstateEvent);
+        window.requestAnimationFrame(loop);
+      }else{
+        _body.removeEventListener("touchend", mobileListener);
+        _body.setAttribute("style", "touch-action: auto; user-select: auto");
+        if (isAddMTrigger){  triggerEle.remove(); }
+      }
+    }
+    window.requestAnimationFrame(loop);
+  };
+
+  function pcListener(){
+    function loop() {
+      if (!state) {
+        setHistory();
+        window.addEventListener('popstate', popstateEvent);
+        window.requestAnimationFrame(loop);
+      }else{
+        document.removeEventListener("click", pcListener);
+      }
+    }
+    window.requestAnimationFrame(loop);
+  };
+
+  function appendTriggerEle(){
+      triggerEle = document.createElement("div");
+      triggerEle.id = "trigger_ele";
+      triggerEle.style.width = "100%";
+      triggerEle.style.height = "100%";
+      triggerEle.style.position = "fixed";
+      // triggerEle.style.backgroundColor = "#ccc";
+      triggerEle.style.left = "0";
+      triggerEle.style.top = "0";
+      triggerEle.style.zIndex = "999";
+      _body.append(triggerEle);
+  };
+
+  function init(){
+    if(isMobile){
+        if (isAddMTrigger){ appendTriggerEle(); }
+        _body.setAttribute("style", "touch-action: none; user-select: none;");
+        _body.addEventListener("touchend", mobileListener);
+      }else{
+        // setHistory(); //因為chrome都需要點擊才會觸發 所以pc都改成監聽點擊
+        document.addEventListener("click", pcListener);
+    }
+  };
+  
+  function popstateEvent(event){
+    // 判斷網址是否有#hash
+    var href = location.href;
+    if(location.hash || href[href.length-1] === "#") return;
+
+    if(isSetCookie && isMobile){  //★cookie
+      popRandomNews(ampNewsID);
+    }
+
+    let popPageUrl = isMobile ? m_readMoreUrl : pc_readMoreUrl;
+    
+    // safari bug: 往上頁和往下頁都會觸發 所以要判斷是去哪頁
+    // 第一次觸發去pop是none，所以也要包括
+    const nextState = event.state ? event.state.page : "none";
+
+    if(nextState.indexOf("referrer") < 0){ //往referrer(第一頁)不觸發
+      //指定跳出頁(需同domain)
+      history.replaceState({ page: "pop" }, "Pop Page", popPageUrl);
+      window.location.href = window.location.href;
+    }
+  };
+
+  function mobileLoadEvent(){
+    _body = document.querySelector("body");
+    
+    if(newState){
+      window.addEventListener('popstate', popstateEvent);
+      return;
+    }
+
+    if(newState === null) {
+      // 直接打網址沒有referrer(就算上頁也是內網)所以依然會觸發
+      // 但如果中間連出去再回來的第一頁才會再觸發
+      if(document.referrer.indexOf("ettoday") > -1) { return; }
+      init();
+    } 
+    
+  };
+
+  function pcLoadEvent(){
+    if(newState){
+      window.addEventListener('popstate', popstateEvent);
+      return;
+    }
+
+    if(newState === null) {
+      if(isEtBlank){ //桌機內網另開視窗
+        init();
+        localStorage.removeItem("isetblank");
+        return;
+      }
+
+      if(document.referrer.indexOf("ettoday") > -1) { return; }
+      init();
+    }
+  };
+
+  if(isMobile){
+    if (document.readyState === 'loading') { 
+      document.addEventListener('DOMContentLoaded', mobileLoadEvent);
+    } else {
+      mobileLoadEvent();
+    }
+  }else{ // pc版不用onload
+    pcLoadEvent();
+    document.addEventListener("click", setStorage); //pc另開視窗
+  };
+
+  window.addEventListener('hashchange',function(){
+    var href = location.href;
+    if(history.state && !location.hash && href[href.length-1] !== "#") {
+      window.addEventListener('popstate', popstateEvent);
+    }
+  });
+})();
+//readMore：推薦模組 結束====================
+
+//新聞雲 MW 插入文中1廣告 Start ========================================= 
+$(function() {
+  //if (isMobile && $("#mobileweb_pageviews").length > 0 && (window.location.href.indexOf("www.ettoday.net") > 0 || window.location.href.indexOf("finance.ettoday.net") > 0) && $(".news-page").length > 0) { //手機 & Msite & 主站or財經雲 & 新聞頁
+  if ($("#mobileweb_pageviews").length > 0 && $(".news-page").length > 0 && $("#dablewidget_goB9bVZX").length > 0 ) { //Msite & 新聞頁 & 新聞中1可投聯播網(有#dablewidget_goB9bVZX)
+
+	if ($("#dablewidget_Gok6vYXv").length === 0 && $("#etPassbackTag").length === 0){// 文末沒有 Dable Banner 模組
+		//文中1 插入 Dable Banner 模組(goB9bVZX)
+		console.log("%c 文中1 插入 Dable Banner 模組", "color:#fff;background:red");
+		$("#dablewidget_goB9bVZX").append('<div class="ad_300x250" style="margin-top:10px;text-align:center"><iframe class="mobileweb_innews_iframe" width="100%" height="300" frameborder="0" marginwidth="0" marginheight="0" vspace="0" hspace="0" allowtransparency="true" scrolling="no" allowfullscreen="true" src="https://www.ettoday.net/events/passback/dable/mweb-innews.htm?d=202305201400&from=MsiteAdInNews_1"></iframe></div>');
+/*
+		(function(d,a,b,l,e,_) {
+		if(d[b]&&d[b].q)return;d[b]=function(){(d[b].q=d[b].q||[]).push(arguments)};e=a.createElement(l);
+		e.async=1;e.charset="utf-8";e.src="//static.dable.io/dist/plugin.min.js";
+		_=a.getElementsByTagName(l)[0];_.parentNode.insertBefore(e,_);
+		})(window,document,"dable","script");
+		dable('setService', 'm.ettoday.net'); 
+		dable("renderWidget", "dablewidget_goB9bVZX", {ignore_items: true});
+*/
+	}else{
+		//文中1 插入 Prebid
+		console.log("%c 文中1 插入 Prebid", "color:#fff;background:red");
+
+		if (isMobilePhone && isPortrait) {/*直 Phone*/
+		  /*滿版*/
+		  adWidth = window.screen.width;
+		  adHeight = Math.round(window.screen.width/300*250);
+		}else{/*其它*/
+		  /*336x280*/
+		  adWidth = 336;
+		  adHeight = 280;
+		}
+		//prebid → adx → adsense 300x250
+		$("#dablewidget_goB9bVZX").append('<div class="ad_300x250" style="margin-top:10px;text-align:center"><iframe class="mobileweb_innews_iframe" width="100%" height="250" frameborder="0" marginwidth="0" marginheight="0" vspace="0" hspace="0" allowtransparency="true" scrolling="no" allowfullscreen="true" src="https://www.ettoday.net/events/passback/prebid/mw_innews.htm?from=MsiteAdInNews_1&r='+Math.random()+'"></iframe></div>');
+		//adx → adsense 滿版
+		//$("#dablewidget_goB9bVZX").append('<div class="ad_300x250" style="margin-top:10px;text-align:center"><iframe class="mobileweb_innews_iframe" width="100%" height="'+adHeight+'" frameborder="0" marginwidth="0" marginheight="0" vspace="0" hspace="0" allowtransparency="true" scrolling="no" allowfullscreen="true" src="https://www.ettoday.net/events/passback/googlead/fullwidth-adx.php?s=adx-mobileweb-innews-tamedia&w=300&h=250&from=MsiteAdInNews_1&r='+Math.random()+'"></iframe></div>');
+
+	}
+  }
+});
+//新聞雲 MW 插入文中1廣告 end ========================================= 
+
+//流量統計處理 from fb, line, google , readMore, ref ========================================= start
+if (window.location.href.indexOf("from=fb") > 0) {//from FB
+
+	//新聞雲_全頻道_流量統計(Facebook)
+	var ts = Math.random();
+	var script7 = document.createElement("script");
+	script7.type = "text/javascript";
+	script7.src = "https://ad1.ettoday.net/ads.php?bid=all_pageviews_facebook&rr="+ ts;
+	document.head.appendChild(script7);
+
+}else if (window.location.href.indexOf("from=line") > 0) {//from Line
+
+	//新聞雲_全頻道_流量統計(Line)
+	var ts = Math.random();
+	var script7 = document.createElement("script");
+	script7.type = "text/javascript";
+	script7.src = "https://ad1.ettoday.net/ads.php?bid=all_pageviews_line&rr="+ ts;
+	document.head.appendChild(script7);
+
+}else if (window.location.href.indexOf("from=google") > 0 || window.location.href.indexOf("from=news.google.com") > 0) {//from Google
+
+	//新聞雲_全頻道_流量統計(Google)
+	var ts = Math.random();
+	var script7 = document.createElement("script");
+	script7.type = "text/javascript";
+	script7.src = "https://ad1.ettoday.net/ads.php?bid=all_pageviews_google&rr="+ ts;
+	document.head.appendChild(script7);
+
+}else if (window.location.href.indexOf("from=readMore") > 0) {//from readMore
+
+	//新聞雲_全頻道_流量統計(readMore)
+	var ts = Math.random();
+	var script7 = document.createElement("script");
+	script7.type = "text/javascript";
+	script7.src = "https://ad1.ettoday.net/ads.php?bid=all_pageviews_readmore&rr="+ ts;
+	document.head.appendChild(script7);
+}
+//流量統計處理 from fb, line, google , readMore, ref ========================================= end
+
+//定期清除不必要的 GA4 cookie ======================================================== start
+//if (document.cookie.indexOf("CookieReseted") === -1 && window.location.hostname.includes("media.")) {
+if (document.cookie.indexOf("CookieReseted") === -1) { //CookieReseted 不存在時
+  //clearAllCookie(); //清除所有 cookie (白名單除外)
+  clearSomeCookie(); //清除不必要的 cookie
+  console.log("ET Cookies cleared!!!");
+}
+
+function clearSomeCookie(){
+  //取得當前的日期時間
+  const currentDate = new Date();
+
+  //設定過期時間為過去的日期，使 cookie 失效
+  currentDate.setFullYear(currentDate.getFullYear() - 1);
+
+  //取得所有的 cookie 名稱
+  const cookies = document.cookie.split(';');
+  //設定黑名單(要清除的 cookiename)
+  blacklist = [
+    //子頻道
+    "_ga_0EGF9YQ9BN",
+    "_ga_JVDPSEL5QH",
+    "_ga_2HJ65C55GM",
+    "_ga_6V1XVMY2HJ",
+    "_ga_1C4EKYZETL",
+    "_ga_9K3S62N7C5",
+    "_ga_BS1LGR87VQ",
+    "_ga_DJCCTPSJDT",
+    "_ga_B9G3CYVKF0",
+    "_ga_T3C2T8L35W",
+    "_ga_FZLE2VJW12",
+    "_ga_JQNDWD28RZ",
+    "_ga_KD7QNC2PBP",
+    "_ga_0EYT2YCG43",
+    "_ga_GVJ4QQ3W90",
+    "_ga_5DMPEZ684M",
+    "_ga_CRLVSG6V3F",
+    "_ga_JYGZKCZLK4",
+    "_ga_NWS07Q17JY",
+    "_ga_WY6R719DZ3",
+    "_ga_884QZTRRNY",
+    "_ga_RWKNJXB8LF",
+    "_ga_WMQGSB5EYH",
+    "_ga_3GFBGHSCXJ",
+    "_ga_083DCNEVNG",
+    "_ga_5FBX2QXNFW",
+    "_ga_9Z5KRGTMSV",
+    "_ga_XENNDEZ527",
+    "_ga_YRE2KMTEFK",
+    "_ga_9WED7PT0CT",
+    "_ga_VC02SCTP4W",
+    "_ga_LX0SXRFDNP",
+    "_ga_GW13P6ELJE",
+    "_ga_B8LPS99LCC",
+    "_ga_27F9JFBTM6",
+    "_ga_D3GQTBRK2W",
+    "_ga_1LWPXRRLEN",
+    "_ga_5VK843QHY3",
+    "_ga_15BX7QTD8R",
+    "_ga_CLF8MSWWLL"
+  ];
+
+  cookies.forEach((cookie) => {
+    const cookieName = cookie.split('=')[0].trim();
+    //清除 blacklist 中的 cookie
+    if (blacklist.includes(cookieName)) {
+      document.cookie = `${cookieName}=; expires=${currentDate.toUTCString()}; path=/; domain=.ettoday.net`;
+    }
+  });
+  //寫入cookie: CookieReseted
+  const expirationDate = new Date();
+
+  //用毫秒表示
+  //expirationDate.setTime(expirationDate.getTime() + (1 * 24 * 60 * 60 * 1000));// cookies 效期為 1 天
+  //expirationDate.setTime(expirationDate.getTime() + (1 * 60 * 60 * 1000));// cookies 效期為 1 小時
+  expirationDate.setTime(expirationDate.getTime() + (10 * 60 * 1000));// cookies 效期為 10 分鐘
+  document.cookie = 'CookieReseted=true; expires='+expirationDate.toUTCString()+'; domain=ettoday.net; path=/';
+}
+
+function clearAllCookie(){
+  //取得當前的日期時間
+  const currentDate = new Date();
+
+  //設定過期時間為過去的日期，使 cookie 失效
+  currentDate.setFullYear(currentDate.getFullYear() - 1);
+
+  //取得所有的 cookie 名稱
+  const cookies = document.cookie.split(';');
+  //設定白名單
+  whitelist = [
+    //DCS用
+    "et_token",
+    "dcs_local_cid",
+    "dcs_cookie_id",
+    //標籤用
+    "et_tag",
+    "et_MAD",
+    "et_client_country",
+    //GA
+    "_ga",
+    "_gid",
+    "__gads",
+    "__gpi",
+    "_ga_EK0KZ2R7Q6",
+    "_ga_KD7QNC2PBP",
+    "_ga_0EYT2YCG43",
+    //其它
+    "AMP_TOKEN",
+    "AMP-Readmore",
+    "AMP-Readmore-expire",
+    "AMP-Switch",
+    "_cc_id",
+    "__htid",
+    "_ss_pp_id",
+    "comScore",
+    "CookieReseted"
+  ];
+
+  cookies.forEach((cookie) => {
+    const cookieName = cookie.split('=')[0].trim();
+    //忽略 whielist cookie
+    if (!whitelist.includes(cookieName)) {
+      document.cookie = `${cookieName}=; expires=${currentDate.toUTCString()}; path=/; domain=.ettoday.net`;
+    }
+  });
+  //寫入cookie: CookieReseted
+  const expirationDate = new Date();
+  expirationDate.setDate(expirationDate.getDate() + 7);//效期 7 天
+  document.cookie = `CookieReseted=true; expires=${expirationDate.toUTCString()}; path=/; domain=.ettoday.net`;
+}
+//定期清除不必要的 GA4 cookie ======================================================== end

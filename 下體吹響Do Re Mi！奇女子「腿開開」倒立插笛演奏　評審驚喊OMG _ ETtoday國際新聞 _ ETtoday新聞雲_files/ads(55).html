@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<!-- saved from url=(0097)https://media.ettoday.net/events/passback/ettoday/ad-preview.php?aid=all_300x600_3&t=202306300852 -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<!--<base target="_blank">--><base href="." target="_blank">
+<meta name="robots" content="noindex, nofollow, noarchive">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title> | 版位 ID = all_300x600_3</title>
+<style type="text/css">
+* {margin:0;padding:0;border:0px;}
+body {background-color:#fff;}
+img {border:0}
+a {text-decoration:none}
+.banner {margin:0 auto;text-align:center}
+.adJS01, .adIF01 {margin:0 auto;text-align:center}
+</style>
+
+<script src="./f(7).txt"></script><script type="text/javascript" src="./jquery(1).js.下載"></script>
+<script type="text/javascript" src="./jquery.cookie.js.下載"></script>
+
+<script type="text/javascript">
+var u = navigator.userAgent;
+ isLineApp = u.indexOf("Line") > -1;
+ isFbApp = u.indexOf("FB") > -1 && u.indexOf("Messenger") === -1 && u.indexOf("Orca-Android") === -1; 
+ isMessenger = u.indexOf("Messenger") > -1 || u.indexOf("Orca-Android") > -1; 
+ isIGApp = u.indexOf("Instagram") > -1; 
+ isNewsRepublic = u.indexOf("TopBuzz") > -1; 
+ isPuffin = u.indexOf("Puffin") > -1; 
+ isEdge = u.indexOf("Edg") > -1; 
+ isXiaoMi = u.indexOf("XiaoMi") > -1; 
+ isSamsung = u.indexOf("SamsungBrowser") > -1; 
+ isWeixinApp = u.indexOf("MicroMessenger") > -1; 
+ isOpera = u.indexOf("Opera") > -1 || u.indexOf("OPR/") > -1;
+ isFF = u.indexOf("Firefox") > -1 || u.indexOf("FxiOS") > -1;
+ isIE = (u.indexOf("compatible") > -1 && u.indexOf("MSIE") > -1 && !isOpera) || u.indexOf("Trident") > -1;
+
+ isWindows = u.indexOf("Windows") > -1;
+
+ isSafari = u.indexOf("Safari") > -1 && u.indexOf("Chrome") === -1 && u.indexOf("CriOS") === -1 && u.indexOf("FxiOS") === -1;
+
+ isAndroid = u.indexOf("Android") > -1; 
+ isIphone = u.indexOf("iPhone") > -1; 
+ isIpad = u.indexOf("iPad") > -1; 
+
+if (window.screen.width < window.screen.height) {//直式
+  var isPortrait = true;
+  var isLandscape = false;
+}else {//橫式
+  var isPortrait = false;
+  var isLandscape = true;
+}
+
+if (u.indexOf("Mobile") > -1) {
+  var isDesktop = false;
+  if (window.screen.width < window.screen.height) {//直式
+     if (window.screen.width/window.screen.height >= 0.600) {
+       //直 Pad - 固定用 336x280, 320x100
+       var isMobilePhone = false;
+       var isPad = true;
+       var isPadPortrait = true;
+       var isPadLandscape = false;
+     }else {
+       //直 Phone - 滿版
+       var isMobilePhone = true;
+       var isPad = false;
+       var isPadPortrait = false;
+       var isPadLandscape = false;
+     }
+  }else {//橫式
+     if (window.screen.width/window.screen.height <= 1.778) {
+       //橫 Pad - 固定用 336x280, 320x100
+       var isMobilePhone = false;
+       var isPad = true;
+       var isPadPortrait = false;
+       var isPadLandscape = true;
+     }else {
+       //橫 Phone - 固定用 336x280, 320x50
+       var isMobilePhone = true;
+       var isPad = false;
+       var isPadPortrait = false;
+       var isPadLandscape = false;
+     }
+  }
+}else{
+  //是桌機 固定用 336x280, 320x100
+  var isDesktop = true;
+  var isPad = false;
+  var isPadPortrait = false;
+  var isPadLandscape = false;
+}
+
+var isMobile = false;
+var isChrome = false;
+
+if (isIphone){
+  isMobile = true;
+  isChrome = u.indexOf("CriOS") > -1;
+} else if (isIpad) {
+  isMobile = false;
+  isChrome = u.indexOf("CriOS") > -1;
+} else if (isAndroid) {
+  isMobile = true;
+  if ( u.indexOf("wv") > -1 ) {//Line, IG, FB, Messenger
+      isChrome = false;
+  } else if ( u.indexOf("Safari") > -1 && u.indexOf("Chrome") > -1 ) {
+      if (isEdge || isOpera || isXiaoMi || isSamsung || isPuffin) {
+         isChrome = false;
+      } else {
+         isChrome = true;
+      }
+  } else {
+      isChrome = false;
+  }
+} else {
+  if ( u.indexOf("Mobile") > -1 ) {
+      isMobile = true;
+  } else {
+      isMobile = false;
+      isChrome = u.indexOf("Chrome") > -1 && !isWeixinApp && !isEdge && !isOpera && !isPuffin;
+  }
+}
+
+var myCountry = $.cookie("et_client_country"); //取得目前cookie值(國家代碼)
+
+var docReferrer = document.referrer;
+var isFreeTV = false;
+var isMBNews = false;
+if (isIphone){
+  isFreeTV = u.indexOf("Safari") === -1 && u.indexOf("FB") === -1 && u.indexOf("Instagram") === -1; 
+} else if (isAndroid) {
+  isFreeTV = u.indexOf("wv") > -1 && u.indexOf("FB") === -1 && u.indexOf("Instagram") === -1 && u.indexOf("Line") === -1 && (myCountry === null || myCountry === "" || typeof(myCountry) === "undefined") && document.referrer === ""; 
+  isMBNews = u.indexOf("wv") > -1 && u.indexOf("FB") === -1 && u.indexOf("Instagram") === -1 && u.indexOf("Line") === -1 && (myCountry !== null || myCountry !== "" || typeof(myCountry) !== "undefined") && document.referrer === "" && (window.location.href.indexOf("m.ettoday.net") !== -1 || docReferrer.indexOf("m.ettoday.net") !== -1 || window.location.href.indexOf("redirect=1") !== -1 || window.location.href.indexOf("from=ettoday_app") !== -1); 
+}
+if (isFreeTV || isMBNews) {isChrome = false;}
+
+// 台灣 or 海外★
+isNotChrome = ((myCountry === "TW") && !isChrome) || isFreeTV || isMBNews || isLineApp || isFbApp || isIGApp || isSamsung;
+//isNotChrome = ((myCountry === "TW") && !isChrome) || isFreeTV || isMBNews;
+//isNotChrome = ((myCountry === "TW" || myCountry === "HK" || myCountry === "MO" || myCountry === "CN" || myCountry === "MY" || myCountry === "SG") && !isChrome) || isFreeTV || isMBNews || isLineApp || isFbApp || isIGApp || isSamsung;
+//isNotChrome = ((myCountry === "TW" || myCountry === "HK" || myCountry === "MO" || myCountry === "CN" || myCountry === "MY" || myCountry === "SG") && !isChrome) || isFreeTV || isMBNews;
+
+//DFP ============================== Start
+var script0 = document.createElement("script");
+script0.type = "text/javascript";
+script0.async = true; //dfp async
+script0.src = "https://securepubads.g.doubleclick.net/tag/js/gpt.js";
+document.head.appendChild(script0);
+window.googletag = window.googletag || {cmd: []};
+//DFP ============================== End
+
+if (isMobile) {//手機
+
+
+}else{////非手機
+
+}
+
+// Prebid ===================================================
+var script4 = document.createElement("script");
+script4.type = "text/javascript";
+script4.src = "https://cdn2.ettoday.net/ad/prebid/prebid.js?v=5.20.4";
+document.head.appendChild(script4);
+
+// CRITEO CDB =============================================
+/*
+var script2 = document.createElement("script");
+script2.type = "text/javascript";
+script2.async = true;
+script2.src = "https://static.criteo.net/js/ld/publishertag.js";
+document.head.appendChild(script2);
+if (isMobile) {//手機
+	var CriteoAdUnits = { "placements": [
+	    // Criteo Placements List
+	    { "slotid": "criteo_783188", "zoneid": 783188 }, // EtToday - TW - CDB - SA - MOBILE - 300x250 Top
+	    { "slotid": "criteo_783189", "zoneid": 783189 }, // EtToday - TW - CDB - SA - MOBILE - 300x250 Bottom
+	    { "slotid": "criteo_1191499", "zoneid": 1191499 }, // EtToday - TW - CDB - SA - MOBILE - 300x250 Inread
+	]};
+}else{//非手機
+	var CriteoAdUnits = { "placements": [
+	    // Criteo Placements List
+	    { "slotid": "criteo_1191499", "zoneid": 1191499 }, // EtToday - TW - CDB - SA - MOBILE - 300x250 Inread
+	    { "slotid": "criteo_943528", "zoneid": 943528 }, // EtToday - TW - CDB - SA - 300x250 - Article UP Left (PC)
+	    { "slotid": "criteo_1086336", "zoneid": 1086336 }, // EtToday - TW - CDB - SA - 970x250 - Top (PC)
+	    { "slotid": "criteo_806580", "zoneid": 806580 }, // EtToday - TW - CHB - SA - 300x250 (PC)
+	    { "slotid": "criteo_1086335", "zoneid": 1086335 }, // EtToday - TW - CDB - SA - 300x250 - #2  (PC)
+	    { "slotid": "criteo_806581", "zoneid": 806581 }, // EtToday - TW - CHB - SA - 300x600 (PC)
+	    { "slotid": "criteo_845893", "zoneid": 845893 }, // EtToday - TW - CDB - SA - 300x250 - Bottom Right (PC)
+	]};
+}
+window.Criteo = window.Criteo || {}; window.Criteo.events = window.Criteo.events || [];
+var CriteoBids=CriteoBids||{},CriteoBidsReceived=function(){for(var t in CriteoAdUnits.placements){var e=CriteoAdUnits.placements[t],i=Criteo.GetBidsForAdUnit(e.slotid);CriteoBids[e.slotid]=i.length>0?i[0]:null}},CriteoDisplayAd=function(t,e,i){if(void 0===i&&(i=0),null!==CriteoBids[t])if(void 0===CriteoBids[t]&&null!==CriteoBids[t])100>i&&setTimeout(function(){CriteoDisplayAd(t,e,i+1)},200);else{var r=document.getElementById(t);if(r){var s=document.createElement("iframe");s.setAttribute("id",t+"_iframe"),s.setAttribute("frameborder","0"),s.setAttribute("allowtransparency","true"),s.setAttribute("hspace","0"),s.setAttribute("marginwidth","0"),s.setAttribute("marginheight","0"),s.setAttribute("scrolling","no"),s.setAttribute("vspace","0"),s.setAttribute("width",CriteoBids[t].width),s.setAttribute("height",CriteoBids[t].height),r.appendChild(s);var o='<script src="'+CriteoBids[t].displayUrl+'"></scr'+'ipt>',d=s.contentWindow.document;d.open(),d.write(o),d.close()}}else"function"==typeof e&&e()};
+Criteo.events.push(function() { Criteo.RequestBids(CriteoAdUnits, CriteoBidsReceived, 2000); });
+*/
+</script><script type="text/javascript" async="" src="./f(8).txt"></script><script type="text/javascript" src="./prebid(2).js.下載"></script>
+
+<!--Criteo script #1 Start-->
+<script type="text/javascript">
+/*
+var crtg_nid = '4674';
+var crtg_cookiename = 'crtg_rta';
+var crtg_varname = 'crtg_content';
+function crtg_getCookie(c_name){ var i,x,y,ARRCookies=document.cookie.split(";");for(i=0;i<ARRCookies.length;i++){x=ARRCookies[i].substr(0,ARRCookies[i].indexOf("="));y=ARRCookies[i].substr(ARRCookies[i].indexOf("=")+1);x=x.replace(/^\s+|\s+$/g,"");if(x==c_name){return unescape(y);} }return'';}
+var crtg_content = crtg_getCookie(crtg_cookiename);
+var crtg_rnd=Math.floor(Math.random()*99999999999);
+(function(){
+var crtg_url=location.protocol+'//rtax.criteo.com/delivery/rta/rta.js?netId='+escape(crtg_nid);
+crtg_url +='&cookieName='+escape(crtg_cookiename);
+crtg_url +='&rnd='+crtg_rnd;
+crtg_url +='&varName=' + escape(crtg_varname);
+var crtg_script=document.createElement('script');crtg_script.type='text/javascript';crtg_script.src=crtg_url;crtg_script.async=true;
+if(document.getElementsByTagName("head").length>0)document.getElementsByTagName("head")[0].appendChild(crtg_script);
+else if(document.getElementsByTagName("body").length>0)document.getElementsByTagName("body")[0].appendChild(crtg_script);
+})();
+*/
+</script>
+<!--Criteo script #1 End-->
+
+<!-- Google tag (gtag.js) -->
+<script async="" src="./js(8)"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-RWKNJXB8LF');
+</script>
+<meta http-equiv="origin-trial" content="AymqwRC7u88Y4JPvfIF2F37QKylC04248hLCdJAsh8xgOfe/dVJPV3XS3wLFca1ZMVOtnBfVjaCMTVudWM//5g4AAAB7eyJvcmlnaW4iOiJodHRwczovL3d3dy5nb29nbGV0YWdtYW5hZ2VyLmNvbTo0NDMiLCJmZWF0dXJlIjoiUHJpdmFjeVNhbmRib3hBZHNBUElzIiwiZXhwaXJ5IjoxNjk1MTY3OTk5LCJpc1RoaXJkUGFydHkiOnRydWV9"><meta http-equiv="origin-trial" content="As0hBNJ8h++fNYlkq8cTye2qDLyom8NddByiVytXGGD0YVE+2CEuTCpqXMDxdhOMILKoaiaYifwEvCRlJ/9GcQ8AAAB8eyJvcmlnaW4iOiJodHRwczovL2RvdWJsZWNsaWNrLm5ldDo0NDMiLCJmZWF0dXJlIjoiV2ViVmlld1hSZXF1ZXN0ZWRXaXRoRGVwcmVjYXRpb24iLCJleHBpcnkiOjE3MTk1MzI3OTksImlzU3ViZG9tYWluIjp0cnVlfQ=="><meta http-equiv="origin-trial" content="AgRYsXo24ypxC89CJanC+JgEmraCCBebKl8ZmG7Tj5oJNx0cmH0NtNRZs3NB5ubhpbX/bIt7l2zJOSyO64NGmwMAAACCeyJvcmlnaW4iOiJodHRwczovL2dvb2dsZXN5bmRpY2F0aW9uLmNvbTo0NDMiLCJmZWF0dXJlIjoiV2ViVmlld1hSZXF1ZXN0ZWRXaXRoRGVwcmVjYXRpb24iLCJleHBpcnkiOjE3MTk1MzI3OTksImlzU3ViZG9tYWluIjp0cnVlfQ=="><meta http-equiv="origin-trial" content="A/ERL66fN363FkXxgDc6F1+ucRUkAhjEca9W3la6xaLnD2Y1lABsqmdaJmPNaUKPKVBRpyMKEhXYl7rSvrQw+AkAAACNeyJvcmlnaW4iOiJodHRwczovL2RvdWJsZWNsaWNrLm5ldDo0NDMiLCJmZWF0dXJlIjoiRmxlZGdlQmlkZGluZ0FuZEF1Y3Rpb25TZXJ2ZXIiLCJleHBpcnkiOjE3MTkzNTk5OTksImlzU3ViZG9tYWluIjp0cnVlLCJpc1RoaXJkUGFydHkiOnRydWV9"><meta http-equiv="origin-trial" content="A6OdGH3fVf4eKRDbXb4thXA4InNqDJDRhZ8U533U/roYjp4Yau0T3YSuc63vmAs/8ga1cD0E3A7LEq6AXk1uXgsAAACTeyJvcmlnaW4iOiJodHRwczovL2dvb2dsZXN5bmRpY2F0aW9uLmNvbTo0NDMiLCJmZWF0dXJlIjoiRmxlZGdlQmlkZGluZ0FuZEF1Y3Rpb25TZXJ2ZXIiLCJleHBpcnkiOjE3MTkzNTk5OTksImlzU3ViZG9tYWluIjp0cnVlLCJpc1RoaXJkUGFydHkiOnRydWV9"><meta http-equiv="origin-trial" content="As0hBNJ8h++fNYlkq8cTye2qDLyom8NddByiVytXGGD0YVE+2CEuTCpqXMDxdhOMILKoaiaYifwEvCRlJ/9GcQ8AAAB8eyJvcmlnaW4iOiJodHRwczovL2RvdWJsZWNsaWNrLm5ldDo0NDMiLCJmZWF0dXJlIjoiV2ViVmlld1hSZXF1ZXN0ZWRXaXRoRGVwcmVjYXRpb24iLCJleHBpcnkiOjE3MTk1MzI3OTksImlzU3ViZG9tYWluIjp0cnVlfQ=="><meta http-equiv="origin-trial" content="AgRYsXo24ypxC89CJanC+JgEmraCCBebKl8ZmG7Tj5oJNx0cmH0NtNRZs3NB5ubhpbX/bIt7l2zJOSyO64NGmwMAAACCeyJvcmlnaW4iOiJodHRwczovL2dvb2dsZXN5bmRpY2F0aW9uLmNvbTo0NDMiLCJmZWF0dXJlIjoiV2ViVmlld1hSZXF1ZXN0ZWRXaXRoRGVwcmVjYXRpb24iLCJleHBpcnkiOjE3MTk1MzI3OTksImlzU3ViZG9tYWluIjp0cnVlfQ=="><meta http-equiv="origin-trial" content="A/ERL66fN363FkXxgDc6F1+ucRUkAhjEca9W3la6xaLnD2Y1lABsqmdaJmPNaUKPKVBRpyMKEhXYl7rSvrQw+AkAAACNeyJvcmlnaW4iOiJodHRwczovL2RvdWJsZWNsaWNrLm5ldDo0NDMiLCJmZWF0dXJlIjoiRmxlZGdlQmlkZGluZ0FuZEF1Y3Rpb25TZXJ2ZXIiLCJleHBpcnkiOjE3MTkzNTk5OTksImlzU3ViZG9tYWluIjp0cnVlLCJpc1RoaXJkUGFydHkiOnRydWV9"><meta http-equiv="origin-trial" content="A6OdGH3fVf4eKRDbXb4thXA4InNqDJDRhZ8U533U/roYjp4Yau0T3YSuc63vmAs/8ga1cD0E3A7LEq6AXk1uXgsAAACTeyJvcmlnaW4iOiJodHRwczovL2dvb2dsZXN5bmRpY2F0aW9uLmNvbTo0NDMiLCJmZWF0dXJlIjoiRmxlZGdlQmlkZGluZ0FuZEF1Y3Rpb25TZXJ2ZXIiLCJleHBpcnkiOjE3MTkzNTk5OTksImlzU3ViZG9tYWluIjp0cnVlLCJpc1RoaXJkUGFydHkiOnRydWV9"><script src="./f(9).txt" async=""></script></head>
+<body marginwidth="0" marginheight="0">
+<div class="banner">
+<script language="JavaScript" type="text/javascript">
+<!-- <![CDATA[
+    var ts = Math.random();
+    document.write('<scr' + 'ipt language="JavaScript" type="text/javascript" src="https://ad.ettoday.net/ads.php?bid=all_300x600_3&rr='+ ts +'"></scr' + 'ipt>');
+// ]]> -->
+</script><script language="JavaScript" type="text/javascript" src="./ads(37).php"></script><div id="adJS01-8030" class="adJS01" style="width:300px;overflow:hidden"><script async="" src="./f(10).txt"></script><!-- 大型摩天_300x600_1 --><ins class="adsbygoogle" style="display:inline-block;width:300px;height:600px" data-ad-client="ca-pub-7504183592568612" data-ad-slot="8950680970" data-adsbygoogle-status="done"><div id="aswift_0_host" tabindex="0" title="Advertisement" aria-label="Advertisement" style="border: none; height: 600px; width: 300px; margin: 0px; padding: 0px; position: relative; visibility: visible; background-color: transparent; display: inline-block;"><iframe id="aswift_0" name="aswift_0" style="left:0;position:absolute;top:0;border:0;width:300px;height:600px;" sandbox="allow-forms allow-popups allow-popups-to-escape-sandbox allow-same-origin allow-scripts allow-top-navigation-by-user-activation" width="300" height="600" frameborder="0" marginwidth="0" marginheight="0" vspace="0" hspace="0" allowtransparency="true" scrolling="no" src="./ads(59).html" data-google-container-id="1.ynzjk3r4k8e" data-load-complete="true"></iframe></div></ins><script>     (adsbygoogle = window.adsbygoogle || []).push({});</script></div>
+</div>
+
+<script>
+//廣告垂直置中
+
+$(window).load(function() {
+if (location.href.indexOf("app_interstitial_1") !=-1){//是app翻頁廣告
+	var wH = $(window).height();
+	var dH = $(document).height();
+	var bannerH = $(".banner").height();
+	
+	if (wH>bannerH){
+		$(".banner").css("margin-top",""+(wH-50-bannerH)/2+"px")
+	}
+}
+});
+</script>
+
+<iframe src="./aframe(17).html" width="0" height="0" style="display: none;"></iframe></body></html>
